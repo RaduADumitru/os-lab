@@ -70,4 +70,5 @@ int main(int argc, char **argv) {
             perror(argv[argc-1]);
             exit(EXIT_FAILURE);
         }
+    return 0;
     }
