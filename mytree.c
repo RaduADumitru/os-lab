@@ -39,7 +39,7 @@ void tree(char* path, int level) {
         //folosim lstat() pentru a putea gasi si legaturile simbolice pe langa fisiere propriu-zise
         int r = lstat(newpath, &buf);
         //afisam: fisiere propriu-zise, legaturi simbolice sau tuburi
-        if(S_ISREG(buf.st_mode) || S_ISLINK(buf.st_mode) || S_ISFIFO(buf.st_mode)){
+        if(S_ISREG(buf.st_mode) || S_ISLNK(buf.st_mode) || S_ISFIFO(buf.st_mode)){
             printf("%s", direntptr->d_name);
             free(newpath);
             continue;
