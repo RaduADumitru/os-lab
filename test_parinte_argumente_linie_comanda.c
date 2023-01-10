@@ -10,6 +10,7 @@
 int main(int argc, char **argv) {
     printf("Proces parinte pornit\n");
     system("./test_fiu_argumente_linie_comanda");
+    //asteptam sa se finalizeze procesul fiu
     wait(NULL);
     printf("argumente linie de comanda parinte: ");
     for(int i=1; i<=argc-1; i++){
