@@ -50,15 +50,26 @@ int main(int argc, char **argv) {
         }
         // citire din fd in fd_final folosind buffer
         char buffer[256];
-        while (read(fd, &buffer, sizeof(buffer) > 0))
+        int bytes_read;
+        while ((bytes_read = read(fd, &buffer, sizeof(buffer)) > 0))
         {
-            write(fd_final, &buffer, sizeof(buffer));
+            if(write(fd_final, &buffer, sizeof(buffer)) < 0) {
+                perror(argv[i]);
+                exit(EXIT_FAILURE);
+            }
         }
+        //tratam eroare la citire
+        if(bytes_read < 0) {
+            perror(argv[i]);
+            exit(EXIT_FAILURE);
+        }
+        //tratam eroare la inchiderea fisierului
         if(close(fd)<0) {
             perror(argv[i]);
             exit(EXIT_FAILURE);
         }
     }
+    //tratam eroare la inchiderea fisierului final
     if(close(fd_final)<0) {
             perror(argv[argc-1]);
             exit(EXIT_FAILURE);

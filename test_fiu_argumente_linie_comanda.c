@@ -5,7 +5,7 @@
  comanda cu care a fost lansat "p". */
  // Fiu pornit cu system(); nu e menit sa fie rulat prin linia de comanda
  int main(int argc, char **argv) {
-    printf("Proces fiu pornit prin system()\n");
+    printf("Proces fiu pornit prin apel system()\n");
     printf("argumente linie de comanda fiu: ");
     for(int i=1; i<=argc-1; i++){
         printf("%s ", argv[i]);

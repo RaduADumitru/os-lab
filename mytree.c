@@ -19,6 +19,7 @@ void tree(char* path, int level) {
         char* newpath = (char*)malloc(sizeof(path) + sizeof(direntptr->d_name)+2);
         sprintf(newpath, "%s/%s", path, direntptr->d_name);
         printf("\n");
+        //afisare ramura arbore
         for(int prez_lvl=0; prez_lvl < level; prez_lvl++){
             printf("|");
             for(int sp = 0; sp < 3; sp++){
@@ -29,6 +30,7 @@ void tree(char* path, int level) {
         for(int poz=0; poz<3; poz++){
             printf("-");
         }
+        //daca gasim un director in care avem acces, facem apel recursiv de functie din acesta, la un nivel in plus
         if((direntptr->d_type == DT_DIR) && (access(newpath, R_OK) == 0)){
             printf("%s", direntptr->d_name);
             tree(newpath, level+1);

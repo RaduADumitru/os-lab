@@ -32,8 +32,8 @@ int main(int argc, char **argv)
   }
 
   pid_t pid = fork();
+  // tratam eroare in caz ca nu se poate face fork
   if (pid < 0)
-  // Eroare
   {
     perror("Eroare: nu s-a putut face fork");
     exit(EXIT_FAILURE);
@@ -42,12 +42,14 @@ int main(int argc, char **argv)
   if (pid == 0)
   //copil
   {
-    //inchidem capatul de citire
+    //inchidem capatul de citire, nefolosit aici
     close(pipefd[0]);
-    //capatul de scrie va fi setat STDOUT
+    //capatul de scriere va fi setat STDOUT
     dup2(pipefd[1], STDOUT_FILENO);
     close(pipefd[1]);
     //executa procesul pasat in linia de comanda, inlocuindu-l pe cel curent
+    //cu execvp putem pasa si argumente de linie de comanda
+    //parametrii de linie de comanda sunt pasati drept al doilea parametru, sub forma de vector de stringuri
     execvp(argv[1], &argv[1]);
 
     //procesul este inlocuit de exec; la codul de mai jos se mai ajunge numai in caz de erori
@@ -58,7 +60,7 @@ int main(int argc, char **argv)
   else
   //parinte
   {
-    //inchidem capatul de scriere
+    //inchidem capatul de scriere, nefolosit aici
     close(pipefd[1]);
     //capatul de citire va fi setat STDIN
     dup2(pipefd[0],STDIN_FILENO);
@@ -67,40 +69,42 @@ int main(int argc, char **argv)
     int word_count = 0;
     char buffer[256];
     int bytes_read;
-    bool in_word = false; 
+    bool is_in_word = false; 
     while ((bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer))) > 0)
     { 
       for (int i = 0; i < bytes_read; i++)
       {
+        //verificam daca am ajuns la spatiu
         if (isspace(buffer[i]))
         {
-          if (in_word)
+          if (is_in_word)
           //daca s-a gasit un spatiu in timp ce citeam un cuvant, s-a terminat citirea cuvantului
           { 
             word_count++;
-            in_word = false;
+            is_in_word = false;
           }
         }
         //daca se gaseste o litera, am intrat inauntrul unui cuvant
         else
         { 
-          in_word = true;
+          is_in_word = true;
         }
       }
     }
+    //read returneaza -1 la erori
     if (bytes_read == -1)
     {
       perror("Citire esuata");
       return 1;
     }
     //adaugarea unui ultim cuvant daca exista, ce nu ar fi fost gasit din bucla precedenta
-    if (in_word)
+    if (is_in_word)
     {
       word_count++;
     }
-    wait(NULL);
 
-    printf("Numarul de cuvinte scrise de procesul copil: %d\n", word_count);
+    wait(NULL);
+    printf("%d cuvinte scrise de procesul fiu %s\n", word_count, argv[1]);
     return 0;
   }
 }
