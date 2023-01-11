@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     // validare intrare
     // 1) numar impar de argumente, diferit de 1
     if(argc % 2 != 1 || argc == 1) {
-        fprintf(stderr, "Eroare: numar invalid de argumente; utilizare: %s <f1> + <f2> + ... + <fn> f\n", argv[0]);
+        fprintf(stderr, "Eroare: numar invalid de argumente; utilizare: %s <f1> + <f2> + ... + <fn> <f>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
     //2) argumentele de pe pozitii impare pe langa primul si ultimul sa fie +
@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     int fd_final = open(argv[argc-1], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
     if(fd_final<0) {
         if (errno == EEXIST) {
-            fprintf(stderr, "Eroare: fisierul %s este deja existent", argv[argc-1]);
+            fprintf(stderr, "Eroare: fisierul %s este deja existent\n", argv[argc-1]);
         }
         else {
             perror(argv[argc-1]);

@@ -38,7 +38,7 @@ void tree(char* path, int level) {
             continue;
         }
         struct stat buf;
-        //folosim lstat() pentru a putea gasi si legaturile simbolice pe langa fisiere propriu-zise
+        //folosim lstat() in loc de stat() pentru a putea gasi si legaturile simbolice pe langa fisiere propriu-zise
         int r = lstat(newpath, &buf);
         //afisam: fisiere propriu-zise, legaturi simbolice sau tuburi
         if(S_ISREG(buf.st_mode) || S_ISLNK(buf.st_mode) || S_ISFIFO(buf.st_mode)){

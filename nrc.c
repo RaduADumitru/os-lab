@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   {
     //inchidem capatul de citire, nefolosit aici
     close(pipefd[0]);
-    //capatul de scriere va fi setat STDOUT
+    //capatul de scriere va fi setat STDOUT, pentru ca output-ul procesului sa fie scris in pipe
     dup2(pipefd[1], STDOUT_FILENO);
     close(pipefd[1]);
     //executa procesul pasat in linia de comanda, inlocuindu-l pe cel curent
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
   {
     //inchidem capatul de scriere, nefolosit aici
     close(pipefd[1]);
-    //capatul de citire va fi setat STDIN
+    //capatul de citire va fi setat STDIN, ca sa citeasca din pipe output-ul procesului
     dup2(pipefd[0],STDIN_FILENO);
     close(pipefd[0]);
     //citire bit cu bit pentru numararea cuvintelor
