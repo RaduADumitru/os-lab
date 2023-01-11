@@ -29,6 +29,8 @@ int main(int argc, char **argv) {
     }
     //verificam daca ultimul fisier este deja existent prin flagul O_EXCL; in caz ca da, eroare, pentru ca trebuie sa fie nou creat.
     //eroare si in cazul in care nu a putut fi creat
+    // O_WRONLY write only, O_CREAT va crea fisierul daca nu exista, O_EXCL scrie EEXIST la errno daca exista fisierul
+    // S_IRUSR si S_IWUSR ofera drepturi read respectiv write pentru user curent
     int fd_final = open(argv[argc-1], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
     if(fd_final<0) {
         if (errno == EEXIST) {
@@ -39,10 +41,6 @@ int main(int argc, char **argv) {
         }
         exit(EXIT_FAILURE);
     }
-    /*    if(close(fd_final)<0) {
-        fprintf(stderr, "Eroare: fisierul %s nu a putut fi inchis", argv[argc-1]);
-        exit(EXIT_FAILURE);
-    } */
     int fd;
     for(int i = 1; i < argc-1; i+=2) {
         fd = open(argv[i], O_RDONLY);
@@ -50,16 +48,11 @@ int main(int argc, char **argv) {
             perror(argv[i]);
             exit(EXIT_FAILURE);
         }
-    /*       fd_final = open(argv[argc-1], O_APPEND);
-        if(fd_final == -1) {
-            perror(argv[argc-1]);
-            exit(EXIT_FAILURE);
-        } */
-        // citire din fd in fd_final caracter cu caracter
-        char c;
-        while (read(fd, &c, sizeof(char) > 0))
+        // citire din fd in fd_final folosind buffer
+        char buffer[256];
+        while (read(fd, &buffer, sizeof(buffer) > 0))
         {
-            write(fd_final, &c, sizeof(char));
+            write(fd_final, &buffer, sizeof(buffer));
         }
         if(close(fd)<0) {
             perror(argv[i]);
