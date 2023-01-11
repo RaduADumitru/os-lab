@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdbool.h>
-/*(2 puncte) Program care armeaza ceasul ("alarm") pentru 2 secunde, apoi 
+/*S4 (2 puncte) Program care armeaza ceasul ("alarm") pentru 2 secunde, apoi 
     intra intr-un ciclu infinit. La primirea lui SIGALRM nu se va termina 
     procesul ci se va iesi din ciclu (se va continua programul dupa ciclul 
     respectiv).*/

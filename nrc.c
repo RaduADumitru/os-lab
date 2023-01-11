@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-/* (3 puncte) Scrieti un program "nrc" care se lanseaza sub forma:
+/* A23. (3 puncte) Scrieti un program "nrc" care se lanseaza sub forma:
      nrc   com
  unde "com" este o comanda externa (adica asociata unui fisier executabil de 
  pe disc) avand eventual si argumente in linia de comanda (deci com este un 
@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 
   if (argc < 2)
   {
-    fprintf(stderr, "Eroare: format invalid; utilizare: %s <comanda> <argumente comanda>\n", argv[0]);
+    fprintf(stderr, "Eroare: format invalid! Utilizare: %s <com> <args>\n", argv[0]);
         exit(EXIT_FAILURE);
   }
     //tub
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     close(pipefd[0]);
     //citire bit cu bit pentru numararea cuvintelor
     int word_count = 0;
-    char buffer[256];
+    char buffer[100];
     int bytes_read;
     bool is_in_word = false; 
     while ((bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer))) > 0)

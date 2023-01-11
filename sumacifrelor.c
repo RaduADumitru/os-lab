@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-//(1 punct) Scrieti un program care primeste ca argument in linia de
+//F4 (1 punct) Scrieti un program care primeste ca argument in linia de
 // comanda un intreg si afisaza suma cifrelor sale.
 long suma_cifrelor(long nr) {
         long sum = 0;

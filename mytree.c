@@ -5,6 +5,11 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
+/*
+D1. (4 puncte) Program care primeste ca argument in linia de comanda un
+ director si afisaza arborescenta de directoare si fisiere cu originea
+ in el (similar comenzii tree /f din DOS).
+ */
 void tree(char* path, int level) {
     DIR* dp = opendir(path);
     struct dirent* direntptr;
@@ -30,7 +35,7 @@ void tree(char* path, int level) {
         for(int poz=0; poz<3; poz++){
             printf("-");
         }
-        //daca gasim un director in care avem acces, facem apel recursiv de functie din acesta, la un nivel in plus
+        //daca gasim un director in care avem acces, facem apel recursiv de functie din acesta, la un nivel in plus de afisare
         if((direntptr->d_type == DT_DIR) && (access(newpath, R_OK) == 0)){
             printf("%s", direntptr->d_name);
             tree(newpath, level+1);
@@ -52,7 +57,7 @@ void tree(char* path, int level) {
 }
 int main(int argc, char **argv) {
     if(argc != 2) {
-        fprintf(stderr, "Eroare: format invalid! Utilizare: %s <path>\n", argv[0]);
+        fprintf(stderr, "Eroare: format invalid! Utilizare: %s <cale>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
     //verificam: calea specificata sa fie director

@@ -7,7 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
-/* (2 puncte) Scrieti un program "copy" care se va lansa sub forma:
+/* A1 (2 puncte) Scrieti un program "copy" care se va lansa sub forma:
      copy   f1 + ... + fn    f
  (unde f1, ..., fn, f sunt fisiere) si are ca efect crearea lui f continand
  concatenarea lui f1, ..., fn; daca n=1 se copiaza f1 in f. Se vor folosi
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
             exit(EXIT_FAILURE);
         }
         // citire din fd in fd_final folosind buffer
-        char buffer[256];
+        char buffer[100];
         int bytes_read;
         while ((bytes_read = read(fd, &buffer, sizeof(buffer)) > 0))
         {
