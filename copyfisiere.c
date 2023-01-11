@@ -49,11 +49,11 @@ int main(int argc, char **argv) {
             exit(EXIT_FAILURE);
         }
         // citire din fd in fd_final folosind buffer
-        char buffer[100];
+        char c;
         int bytes_read;
-        while ((bytes_read = read(fd, &buffer, sizeof(buffer)) > 0))
+        while ((bytes_read = read(fd, &c, sizeof(c)) > 0))
         {
-            if(write(fd_final, &buffer, sizeof(buffer)) < 0) {
+            if(write(fd_final, &c, sizeof(c)) < 0) {
                 perror(argv[i]);
                 exit(EXIT_FAILURE);
             }
