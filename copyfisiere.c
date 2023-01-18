@@ -51,7 +51,8 @@ int main(int argc, char **argv) {
         // citire din fd in fd_final folosind buffer
         char c;
         int bytes_read;
-        while ((bytes_read = read(fd, &c, sizeof(c)) > 0))
+        while ((bytes_read = read(fd, &c, sizeof(c)) > 0))ls
+        
         {
             if(write(fd_final, &c, sizeof(c)) < 0) {
                 perror(argv[i]);
