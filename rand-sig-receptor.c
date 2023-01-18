@@ -12,7 +12,7 @@
     protectia la pierderea unor semnale.*/
 //Proces receptor
 
-int nr = 0; 
+volatile int nr = 0; 
 pid_t pa;
 sigset_t smask;
 
@@ -24,10 +24,9 @@ void sigusr1_handler(int n) {
 }
 
 void sigalrm_handler(int n) {
-
     //La primirea SIGALRM se afiseaza numarul de semnale primite, se opreste celalalt proces si se iese din executie
     printf("S-au primit %d semnale\n", nr); 
-    kill(pa, SIGKILL);
+    kill(pa, SIGTERM);
     exit(0);
 }
 
@@ -46,7 +45,7 @@ int main() {
     printf("PID advers: ");
     scanf("%d", &pa);
 
-    //Se vor bloca toate semnalele pe langa SIGUSR! si SIGALRM
+    //Se vor bloca toate semnalele pe langa SIGUSR1 si SIGALRM
     sigfillset(&smask);
     sigdelset(&smask, SIGUSR1);
     sigdelset(&smask, SIGALRM);

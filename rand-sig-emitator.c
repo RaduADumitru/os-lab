@@ -12,7 +12,7 @@
     procesului 1 SIGKILL (asa se va termina procesul 1). Se va asigura
     protectia la pierderea unor semnale.*/
 //Proces emitator
-int nr = 0; 
+volatile int nr = 0; 
 pid_t pa; 
 sigset_t smask;
 
@@ -22,14 +22,11 @@ void sigusr1_handler(int n) {
     signal(n, sigusr1_handler);
 }
 
-// //apelat la captarea sigkill: arata cate semnale s-au trimis
-// void sigkill_handler(int n) {
-//     //se reinnoieste captarea in caz ca este trimis inca un semnal
-//     signal(n, sigkill_handler);
-//     printf("Am trimis %d\n", nr);
-//     exit(0);
-// }
+void sigterm_handler(int n){
 
+    printf("S-au trimis %d semnale\n", nr);
+    exit(0);
+}
 int main() {
     int nr_s, inf = 1, sup = 50;
     //initializare generator numere aleatoare
@@ -43,11 +40,12 @@ int main() {
 
     //se vor capta semnalele cu handlerele respective
     signal(SIGUSR1, sigusr1_handler);
-    // signal(SIGTERM, sigkill_handler);
+    signal(SIGTERM, sigterm_handler);
 
     //initializare masca de semnale ce vor fi blocate, 
     sigemptyset(&smask);
     sigaddset(&smask, SIGUSR1);
+    sigaddset(&smask, SIGTERM);
     //SIG_SETMASK asigura inlocuirea vechii masti de semnale a procesului
     sigprocmask(SIG_SETMASK, &smask, NULL);
 
@@ -59,17 +57,17 @@ int main() {
     sigfillset(&smask);
     //eliminare SIGUSR1 din masca: toate semnalele vor fi blocate in afara de SIGUSR1, primit de la receptor drept confirmare ca a receptionat un semnal trimis
     sigdelset(&smask, SIGUSR1);
-    //pentru a putea opri programul din executie excludem SIGTERM din masca
     sigdelset(&smask, SIGTERM);
 
     for(int i = 0; i < nr_s; ++i) {
         //trimite semnalul si numara semnalele trimise
         if(kill(pa, SIGUSR1) == 0) nr++;
-        //se suspenda procesul pana la primirea unui semnal SIGUSR1, ce nu e parte din masca
+        //se suspenda procesul pana la primirea unui semnal SIGUSR1 sau SIGTERM de la receptor, ce nu e parte din masca
         sigsuspend(&smask);
     }
     
     //va continua rularea pana primeste SIGTERM de la celalalt proces
+    // sigsuspend(&smask);
     while(1) {}
 
     return 0;
